@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+// This is Model
 struct MemoryGame<CardContent>{
     
     private(set) var cards : Array<Card>
