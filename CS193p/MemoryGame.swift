@@ -8,23 +8,46 @@
 import Foundation
 
 // This is Model
-struct MemoryGame<CardContent>{
+struct MemoryGame<CardContent> where CardContent: Equatable{
     
     private(set) var cards : Array<Card>
+    private var IndexOfTheOneAndOnlyFaceUpCard : Int?
     
     mutating func choose(_ card:Card){
-        let chosenCard = Index(of: card)
-        cards[chosenCard].isFaceUp.toggle()
+//        if let chosenCard = Index(of: card){
+//            // 判断是否为int
+//            cards[chosenCard].isFaceUp.toggle()
+//        }
+        
+        if let chosenCard = cards.firstIndex(where: {$0.id == card.id}), !cards[chosenCard].isFaceUp,
+            !cards[chosenCard].isMatched
+        {
+            if let PotentialChoseCardIndex = IndexOfTheOneAndOnlyFaceUpCard{
+                if cards[chosenCard].content == cards[PotentialChoseCardIndex].content {
+                        cards[chosenCard].isMatched = true
+                        cards[PotentialChoseCardIndex].isMatched = true
+                    }
+                IndexOfTheOneAndOnlyFaceUpCard = nil
+                }
+                else{
+                    for index in cards.indices{
+                        cards[index].isFaceUp = false
+                    }
+                    IndexOfTheOneAndOnlyFaceUpCard = chosenCard
+                }
+            cards[chosenCard].isFaceUp.toggle()
+        }
     }
     
     
-    func Index(of card : Card) ->Int{
+    
+    func Index(of card : Card) ->Int?{
         for index in 0..<cards.count{
             if cards[index].id == card.id{
                 return index
             }
         }
-        return 0
+        return nil
     }
     
     init(numberOfPairsOfCards:Int , createCardContent: (Int) -> CardContent){
@@ -36,9 +59,9 @@ struct MemoryGame<CardContent>{
         }
     }
     
-    struct Card:Identifiable{
-        var isFaceUp:Bool = true
-        var isMatched:Bool = true
+    struct Card: Identifiable{
+        var isFaceUp:Bool = false
+        var isMatched:Bool = false
         var content:CardContent
         var id:Int
         

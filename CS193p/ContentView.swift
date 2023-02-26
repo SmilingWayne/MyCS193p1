@@ -30,8 +30,9 @@ struct ContentView: View {
                             }
                         
                     }
-                }.foregroundColor(.red)
-                    .padding(.horizontal)
+                }
+                .foregroundColor(.red)
+                .padding(.horizontal)
             }
            
         }
@@ -69,8 +70,11 @@ struct ContentView: View {
                         .strokeBorder(lineWidth: 3)
                     
                     Text(card.content)
-                        .foregroundColor(.black)
+//                        .foregroundColor(.black)
                         .font(.largeTitle)
+                }
+                else if card.isMatched{
+                    shape.opacity(0)
                 }
                 else{
                     shape.fill()
