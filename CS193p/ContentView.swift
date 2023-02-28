@@ -16,10 +16,8 @@ struct ContentView: View {
     
     @ObservedObject var viewModel : EmojiMemoryGame
     var body: some View {
-        
+
         VStack{
-            Text("Memorize")
-                .foregroundColor(.orange)
             ScrollView{
                 LazyVGrid(columns:[GridItem(.adaptive(minimum: 80))]){
                     ForEach(viewModel.cards) { card in
@@ -31,9 +29,17 @@ struct ContentView: View {
                         
                     }
                 }
-                .foregroundColor(.red)
-                .padding(.horizontal)
+                .foregroundColor(viewModel.chosenColor)
+                .padding()
             }
+        
+            Button {
+                viewModel.startNewGame()
+            } label: {
+                Text("New Game").font(.largeTitle)
+            }
+            .padding()
+            .navigationTitle("Memorize \(viewModel.chosenTheme.ThemeName!)!")
            
         }
     }
@@ -56,11 +62,13 @@ struct ContentView: View {
     struct CardView: View {
         //    var content:String
         //    @State var isFaceUp: Bool = true
-        let card: MemoryGame<String>.Card // 尽可能少地传递，只需要Card @State:很少见！尽量不要使用！
+        var card: MemoryGame<String>.Card // 尽可能少地传递，只需要Card @State:很少见！尽量不要使用！
         var body: some View {
-            let shape = RoundedRectangle(cornerRadius: 25)
             
             ZStack{
+                let shape = RoundedRectangle(cornerRadius: 20)
+                
+                
                 if card.isFaceUp{
                     
                     shape
@@ -68,10 +76,13 @@ struct ContentView: View {
                         .foregroundColor(.white)
                     shape
                         .strokeBorder(lineWidth: 3)
+                        
                     
                     Text(card.content)
 //                        .foregroundColor(.black)
                         .font(.largeTitle)
+                        .padding()
+                        
                 }
                 else if card.isMatched{
                     shape.opacity(0)
@@ -80,7 +91,7 @@ struct ContentView: View {
                     shape.fill()
                     
                 }
-                
+                    
             }
         }
     }

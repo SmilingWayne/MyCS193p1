@@ -14,10 +14,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
     private var IndexOfTheOneAndOnlyFaceUpCard : Int?
     
     mutating func choose(_ card:Card){
-//        if let chosenCard = Index(of: card){
-//            // 判断是否为int
-//            cards[chosenCard].isFaceUp.toggle()
-//        }
         
         if let chosenCard = cards.firstIndex(where: {$0.id == card.id}), !cards[chosenCard].isFaceUp,
             !cards[chosenCard].isMatched
@@ -57,6 +53,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
             cards.append(Card(content: content, id:pairIndex * 2))
             cards.append(Card(content: content, id:pairIndex * 2 + 1))
         }
+        cards.shuffle()
     }
     
     struct Card: Identifiable{
@@ -67,6 +64,14 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
         
         
     }
+}
+
+
+struct Theme {
     
+    let ThemeName : String?
+    let NumberOfCards :Int
+    let ThemeColor : String?
+    let emojis : [String]
     
 }
